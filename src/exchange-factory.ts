@@ -28,7 +28,7 @@ export class CurrencyExchangeFactory {
     return new CurrencyExchangeFactory({
       ourCurrencyInventory,
       keyPrice,
-    }).createExchangeAndTrade({
+    }).createExchangeAndComplete({
       theirCurrencyInventory,
       intent,
       price,
@@ -38,7 +38,7 @@ export class CurrencyExchangeFactory {
   /**
    * This methods gives out result of exchange when all currencies are stocked.
    */
-  static createPreview({
+  static preview({
     price,
     keyPrice,
   }: {
@@ -60,7 +60,7 @@ export class CurrencyExchangeFactory {
       },
       keyPrice,
       price,
-    });
+    }).trade();
   }
 
   private ourCurrencyInventory: ICurrencyStore;
@@ -107,7 +107,7 @@ export class CurrencyExchangeFactory {
     });
   }
 
-  createExchangeAndTrade({
+  createExchangeAndComplete({
     theirCurrencyInventory,
     intent,
     price,
@@ -120,11 +120,15 @@ export class CurrencyExchangeFactory {
       theirCurrencyInventory,
       intent,
       price,
-    }).trade();
+    })
+      .trade()
+      .convertByIntent(intent);
   }
 
   updateInventory(inventory: ICurrencyStore) {
     Object.assign(this.ourCurrencyInventory, inventory);
+
+    return this;
   }
 
   /**
@@ -133,5 +137,7 @@ export class CurrencyExchangeFactory {
    */
   updateKeyPrice(keyPrice: number) {
     this.keyPrice = keyPrice;
+
+    return this;
   }
 }

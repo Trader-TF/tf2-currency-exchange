@@ -9,12 +9,6 @@ export type CurrencyName = keyof ICurrencyStore;
 
 export type Intent = 'buy' | 'sell';
 
-export interface IExchangeSide {
-  store: ICurrencyStore;
-  value: number;
-  isComplete(): boolean;
-}
-
 export type InventoryStore = {
   keys: string[];
   ref: string[];
@@ -25,7 +19,21 @@ export type InventoryStore = {
 export type ExchangeResult = {
   seller: ICurrencyStore;
   buyer: ICurrencyStore;
-  isComplete(): boolean;
   missing: number;
   missingChange: number;
+  convertByIntent(intent: Intent): ConvertedExchangeResult;
+  isComplete(): boolean;
+};
+
+export type ConvertedExchangeResult = {
+  our: ICurrencyStore;
+  their: ICurrencyStore;
+  missing: number;
+  missingChange: number;
+  isComplete(): boolean;
+}
+
+export type Change = {
+  name: string;
+  value: number;
 };
