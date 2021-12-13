@@ -38,13 +38,7 @@ export class CurrencyExchangeFactory {
   /**
    * This methods gives out result of exchange when all currencies are stocked.
    */
-  static preview({
-    price,
-    keyPrice,
-  }: {
-    keyPrice: number;
-    price: ICurrency;
-  }) {
+  static preview({ price, keyPrice }: { keyPrice: number; price: ICurrency }) {
     return new CurrencyExchange({
       buyInventory: {
         keys: Infinity,

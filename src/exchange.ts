@@ -1,6 +1,12 @@
 import { Currency, ICurrency, toScrap } from 'tf2-currency';
 import { CurrencyExchangeSide } from './exchange-side';
-import { ICurrencyStore, CurrencyName, Intent, ExchangeResult, ConvertedExchangeResult } from './types';
+import {
+  ICurrencyStore,
+  CurrencyName,
+  Intent,
+  ExchangeResult,
+  ConvertedExchangeResult,
+} from './types';
 
 export class CurrencyExchange {
   public readonly value: number;
@@ -77,14 +83,15 @@ export class CurrencyExchange {
       return this.getResult();
     }
 
-    const changeCurrency = this.buyer.selectChange()
+    const changeCurrency = this.buyer.selectChange();
     if (!changeCurrency) {
       return this.getResult();
     }
 
     this.buyer.clean(changeCurrency);
 
-    this.seller.value = this.getCurrencyValue(changeCurrency) - this.buyer.value;
+    this.seller.value =
+      this.getCurrencyValue(changeCurrency) - this.buyer.value;
     this.seller.fillCurrencySide();
 
     if (this.seller.isComplete()) {
@@ -99,6 +106,7 @@ export class CurrencyExchange {
   }
 
   private getResult(): ExchangeResult {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
     return {
@@ -117,9 +125,9 @@ export class CurrencyExchange {
           missingChange: this.missingChange,
           isComplete() {
             return self.isComplete();
-          }
-        }
-      }
-    }
+          },
+        };
+      },
+    };
   }
 }

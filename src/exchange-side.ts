@@ -5,7 +5,7 @@ export class CurrencyExchangeSide {
   public value: number;
   public store: ICurrencyStore;
   public inventory: ICurrencyStore;
-  public missingBeforeClean: number = 0;
+  public missingBeforeClean = 0;
   private exchange: CurrencyExchange;
 
   constructor({
