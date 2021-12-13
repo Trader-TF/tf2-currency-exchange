@@ -1,7 +1,7 @@
 {
   "name": "tf2-currency-exchange",
   "version": "0.1.1",
-  "description": "",
+  "description": "Easy to use classes to make picking currencies for trading easy!",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
