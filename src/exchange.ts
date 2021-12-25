@@ -15,8 +15,6 @@ export class CurrencyExchange {
   private seller: CurrencyExchangeSide;
   private buyer: CurrencyExchangeSide;
 
-  private tradeDone = false;
-
   constructor({
     buyInventory,
     sellInventory,
@@ -71,12 +69,6 @@ export class CurrencyExchange {
    * This methods attemps to complete the exchange.
    */
   trade() {
-    if (this.tradeDone) {
-      return this.getResult();
-    }
-
-    this.tradeDone = true;
-
     this.buyer.fillCurrencySide();
 
     if (this.buyer.isComplete()) {
