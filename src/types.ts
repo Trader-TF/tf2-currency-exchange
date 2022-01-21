@@ -31,7 +31,7 @@ export type ConvertedExchangeResult = {
   missing: number;
   missingChange: number;
   isComplete(): boolean;
-}
+};
 
 export type Change = {
   name: string;

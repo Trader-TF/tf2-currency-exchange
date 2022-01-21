@@ -96,8 +96,7 @@ export class CurrencyExchangeSide {
 
     const howManyCanFit = Math.trunc(this.value / currencyValue);
     const amount = this.inventory[currency];
-    const howManyCanAdd = amount > howManyCanFit ? howManyCanFit : amount;
 
-    return howManyCanAdd;
+    return amount > howManyCanFit ? howManyCanFit : amount;
   }
 }

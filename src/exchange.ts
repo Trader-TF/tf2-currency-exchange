@@ -90,8 +90,6 @@ export class CurrencyExchange {
       this.buyer.store[changeCurrency] += 1;
       this.buyer.value = 0;
       this.buyer.missingBeforeClean = 0;
-
-      return this.getResult();
     }
 
     return this.getResult();
