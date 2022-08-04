@@ -452,5 +452,41 @@ describe('CurrencyExchange', () => {
         expect(convertedBuyResult.isComplete()).toEqual(result.isComplete());
       });
     });
+
+    it('Does not contain same item on both sides', () => {
+      const exchange = new CurrencyExchange({
+        buyInventory: {
+          keys: 0,
+          ref: 2,
+          rec: 2,
+          scrap: 1,
+        },
+        sellInventory: {
+          keys: 0,
+          ref: 0,
+          rec: 0,
+          scrap: 2,
+        },
+        price: { keys: 0, metal: 2.55 },
+        keyPrice: 50,
+      });
+
+      const result = exchange.trade();
+
+      expect(result.isComplete()).toBeTruthy();
+      expect(result.buyer).toEqual({
+        keys: 0,
+        ref: 2,
+        rec: 2,
+        scrap: 0,
+      });
+      expect(result.seller).toEqual({
+        keys: 0,
+        ref: 0,
+        rec: 0,
+        scrap: 1,
+      });
+      expect(result.missing).toEqual(0);
+    });
   });
 });
