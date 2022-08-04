@@ -64,9 +64,6 @@ export class CurrencyExchangeSide {
     this.missingBeforeClean = this.value;
 
     const curreniesToClean = this.getCurrenciesToClean(changeCurrency);
-    if (curreniesToClean.length < 2) {
-      return;
-    }
 
     curreniesToClean.forEach((currency) => {
       const amount = this.store[currency];
