@@ -436,6 +436,46 @@ describe('CurrencyExchange', () => {
       expect(result1.missingChange).toEqual(result2.missingChange);
     });
 
+    it('Works correctly with craft weapons', () => {
+      const exchange = new CurrencyExchange({
+        buyInventory: {
+          keys: 0,
+          ref: 2,
+          rec: 0,
+          scrap: 2,
+          craftWeapons: 5,
+        },
+        sellInventory: {
+          keys: 0,
+          ref: 0,
+          rec: 0,
+          scrap: 0,
+          craftWeapons: 0,
+        },
+        price: { keys: 0, metal: 2.33 },
+        keyPrice: 50,
+      });
+
+      const result = exchange.trade();
+
+      expect(result.isComplete()).toBeTruthy();
+      expect(result.buyer).toEqual({
+        keys: 0,
+        ref: 2,
+        rec: 0,
+        scrap: 2,
+        craftWeapons: 2,
+      });
+      expect(result.seller).toEqual({
+        keys: 0,
+        ref: 0,
+        rec: 0,
+        scrap: 0,
+        craftWeapons: 0,
+      });
+      expect(result.missing).toEqual(0);
+    });
+
     describe('convertByIntent', () => {
       it('Converts by intent', () => {
         const exchange = new CurrencyExchange({
