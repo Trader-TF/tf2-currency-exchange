@@ -39,12 +39,14 @@ describe('CurrencyExchangeFactory', () => {
         ref: 0,
         rec: 0,
         scrap: 2,
+        craftWeapons: 0,
       });
       expect(result.seller).toEqual({
         keys: 0,
         ref: 0,
         rec: 0,
         scrap: 0,
+        craftWeapons: 0,
       });
       expect(result.missing).toBe(0);
       expect(result.missingChange).toBe(0);

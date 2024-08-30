@@ -51,12 +51,14 @@ describe('CurrencyExchange', () => {
         ref: 2,
         rec: 1,
         scrap: 0,
+        craftWeapons: 0,
       });
       expect(result.seller).toEqual({
         keys: 0,
         ref: 0,
         rec: 0,
         scrap: 0,
+        craftWeapons: 0,
       });
       expect(result.missing).toEqual(0);
     });
@@ -87,12 +89,14 @@ describe('CurrencyExchange', () => {
         ref: 0,
         rec: 0,
         scrap: 21,
+        craftWeapons: 0,
       });
       expect(result.seller).toEqual({
         keys: 0,
         ref: 0,
         rec: 0,
         scrap: 0,
+        craftWeapons: 0,
       });
       expect(result.missing).toEqual(0);
     });
@@ -123,12 +127,14 @@ describe('CurrencyExchange', () => {
         ref: 14,
         rec: 0,
         scrap: 0,
+        craftWeapons: 0,
       });
       expect(result.seller).toEqual({
         keys: 0,
         ref: 0,
         rec: 0,
         scrap: 0,
+        craftWeapons: 0,
       });
       expect(result.missing).toEqual(0);
     });
@@ -159,12 +165,14 @@ describe('CurrencyExchange', () => {
         ref: 2,
         rec: 2,
         scrap: 0,
+        craftWeapons: 0,
       });
       expect(result.seller).toEqual({
         keys: 0,
         ref: 0,
         rec: 0,
         scrap: 2,
+        craftWeapons: 0,
       });
       expect(result.missing).toEqual(0);
     });
@@ -195,12 +203,14 @@ describe('CurrencyExchange', () => {
         ref: 3,
         rec: 0,
         scrap: 0,
+        craftWeapons: 0,
       });
       expect(result.seller).toEqual({
         keys: 0,
         ref: 0,
         rec: 1,
         scrap: 2,
+        craftWeapons: 0,
       });
       expect(result.missing).toEqual(0);
     });
@@ -231,12 +241,14 @@ describe('CurrencyExchange', () => {
         ref: 0,
         rec: 0,
         scrap: 0,
+        craftWeapons: 0,
       });
       expect(result.seller).toEqual({
         keys: 0,
         ref: 28,
         rec: 3,
         scrap: 9,
+        craftWeapons: 0,
       });
       expect(result.missing).toEqual(0);
     });
@@ -267,12 +279,14 @@ describe('CurrencyExchange', () => {
         ref: 3,
         rec: 1,
         scrap: 0,
+        craftWeapons: 0,
       });
       expect(result.seller).toEqual({
         keys: 0,
         ref: 0,
         rec: 0,
         scrap: 0,
+        craftWeapons: 0,
       });
       expect(result.missing).toEqual(150);
       expect(result.missingChange).toEqual(0);
@@ -304,12 +318,14 @@ describe('CurrencyExchange', () => {
         ref: 2,
         rec: 1,
         scrap: 0,
+        craftWeapons: 0,
       });
       expect(result.seller).toEqual({
         keys: 0,
         ref: 0,
         rec: 0,
         scrap: 1,
+        craftWeapons: 0,
       });
       expect(result.missing).toEqual(1);
       expect(result.missingChange).toEqual(1);
@@ -341,12 +357,14 @@ describe('CurrencyExchange', () => {
         ref: 2,
         rec: 0,
         scrap: 0,
+        craftWeapons: 0,
       });
       expect(result.seller).toEqual({
         keys: 0,
         ref: 0,
         rec: 1,
         scrap: 1,
+        craftWeapons: 0,
       });
       expect(result.missing).toEqual(4);
       expect(result.missingChange).toEqual(1);
@@ -378,12 +396,14 @@ describe('CurrencyExchange', () => {
         ref: 0,
         rec: 0,
         scrap: 0,
+        craftWeapons: 0,
       });
       expect(result.seller).toEqual({
         keys: 0,
         ref: 25,
         rec: 1,
         scrap: 0,
+        craftWeapons: 0,
       });
       expect(result.missing).toEqual(153);
       expect(result.missingChange).toEqual(42);
@@ -479,12 +499,14 @@ describe('CurrencyExchange', () => {
         ref: 2,
         rec: 2,
         scrap: 0,
+        craftWeapons: 0,
       });
       expect(result.seller).toEqual({
         keys: 0,
         ref: 0,
         rec: 0,
         scrap: 1,
+        craftWeapons: 0,
       });
       expect(result.missing).toEqual(0);
     });

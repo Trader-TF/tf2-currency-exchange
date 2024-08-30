@@ -1,6 +1,6 @@
 import { ICurrency } from 'tf2-currency';
 import { CurrencyExchange } from './exchange';
-import { ICurrencyStore, Intent } from './types';
+import { ICurrencyInventory, ICurrencyStore, Intent } from './types';
 
 export class CurrencyExchangeFactory {
   /**
@@ -13,8 +13,8 @@ export class CurrencyExchangeFactory {
     price,
     keyPrice,
   }: {
-    ourCurrencyInventory: ICurrencyStore;
-    theirCurrencyInventory: ICurrencyStore;
+    ourCurrencyInventory: ICurrencyInventory;
+    theirCurrencyInventory: ICurrencyInventory;
     intent: Intent;
     /**
      * Price in keys and metal.
@@ -45,19 +45,21 @@ export class CurrencyExchangeFactory {
         ref: Infinity,
         rec: Infinity,
         scrap: Infinity,
+        craftWeapons: Infinity,
       },
       sellInventory: {
         keys: Infinity,
         ref: Infinity,
         rec: Infinity,
         scrap: Infinity,
+        craftWeapons: Infinity,
       },
       keyPrice,
       price,
     }).trade();
   }
 
-  private ourCurrencyInventory: ICurrencyStore;
+  private ourCurrencyInventory: ICurrencyInventory;
   private keyPrice: number;
 
   // TODO: probably change to assetIds and pick them aswell
@@ -65,7 +67,7 @@ export class CurrencyExchangeFactory {
     ourCurrencyInventory,
     keyPrice,
   }: {
-    ourCurrencyInventory: ICurrencyStore;
+    ourCurrencyInventory: ICurrencyInventory;
     /**
      * Key price in metal.
      */
@@ -82,7 +84,7 @@ export class CurrencyExchangeFactory {
   }: {
     // TODO: possibly add a lazy loading via promises
     // TODO: add keys only option
-    theirCurrencyInventory: ICurrencyStore;
+    theirCurrencyInventory: ICurrencyInventory;
     intent: Intent;
     price: ICurrency;
   }) {
@@ -106,7 +108,7 @@ export class CurrencyExchangeFactory {
     intent,
     price,
   }: {
-    theirCurrencyInventory: ICurrencyStore;
+    theirCurrencyInventory: ICurrencyInventory;
     intent: Intent;
     price: ICurrency;
   }) {
@@ -119,7 +121,7 @@ export class CurrencyExchangeFactory {
       .convertByIntent(intent);
   }
 
-  updateInventory(inventory: ICurrencyStore) {
+  updateInventory(inventory: ICurrencyInventory) {
     Object.assign(this.ourCurrencyInventory, inventory);
 
     return this;

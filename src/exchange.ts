@@ -6,6 +6,7 @@ import {
   Intent,
   ExchangeResult,
   ConvertedExchangeResult,
+  ICurrencyInventory,
 } from './types';
 
 export class CurrencyExchange {
@@ -21,8 +22,8 @@ export class CurrencyExchange {
     price,
     keyPrice,
   }: {
-    buyInventory: ICurrencyStore;
-    sellInventory: ICurrencyStore;
+    buyInventory: ICurrencyInventory;
+    sellInventory: ICurrencyInventory;
     /**
      * Price in keys and metal.
      */
@@ -62,11 +63,13 @@ export class CurrencyExchange {
         return 3;
       case 'scrap':
         return 1;
+      case 'craftWeapons':
+        return 0.5;
     }
   }
 
   /**
-   * This methods attemps to complete the exchange.
+   * This method attempts to complete the exchange.
    */
   trade() {
     this.buyer.fillCurrencySide();
