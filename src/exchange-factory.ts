@@ -1,6 +1,6 @@
 import { ICurrency } from 'tf2-currency';
 import { CurrencyExchange } from './exchange';
-import { ICurrencyStore, Intent } from './types';
+import { ICurrencyInventory, Intent } from './types';
 
 export class CurrencyExchangeFactory {
   /**
@@ -12,9 +12,10 @@ export class CurrencyExchangeFactory {
     intent,
     price,
     keyPrice,
+    theirKeyPrice,
   }: {
-    ourCurrencyInventory: ICurrencyStore;
-    theirCurrencyInventory: ICurrencyStore;
+    ourCurrencyInventory: ICurrencyInventory;
+    theirCurrencyInventory: ICurrencyInventory;
     intent: Intent;
     /**
      * Price in keys and metal.
@@ -24,10 +25,12 @@ export class CurrencyExchangeFactory {
      * Key price in metal
      */
     keyPrice: number;
+    theirKeyPrice?: number;
   }) {
     return new CurrencyExchangeFactory({
       ourCurrencyInventory,
       keyPrice,
+      theirKeyPrice,
     }).createExchangeAndComplete({
       theirCurrencyInventory,
       intent,
@@ -45,34 +48,45 @@ export class CurrencyExchangeFactory {
         ref: Infinity,
         rec: Infinity,
         scrap: Infinity,
+        craftWeapons: Infinity,
       },
       sellInventory: {
         keys: Infinity,
         ref: Infinity,
         rec: Infinity,
         scrap: Infinity,
+        craftWeapons: Infinity,
       },
       keyPrice,
       price,
     }).trade();
   }
 
-  private ourCurrencyInventory: ICurrencyStore;
+  private ourCurrencyInventory: ICurrencyInventory;
   private keyPrice: number;
 
-  // TODO: probably change to assetIds and pick them aswell
+  /**
+   * Key price for the other party,
+   * the `keyPrice` is for us, it's not named `ourKeyPrice`
+   * to not break existing usage.
+   */
+  private theirKeyPrice: number;
+
   constructor({
     ourCurrencyInventory,
     keyPrice,
+    theirKeyPrice,
   }: {
-    ourCurrencyInventory: ICurrencyStore;
+    ourCurrencyInventory: ICurrencyInventory;
     /**
      * Key price in metal.
      */
     keyPrice: number;
+    theirKeyPrice?: number;
   }) {
     this.ourCurrencyInventory = ourCurrencyInventory;
     this.keyPrice = keyPrice;
+    this.theirKeyPrice = theirKeyPrice || keyPrice;
   }
 
   createExchange({
@@ -81,22 +95,26 @@ export class CurrencyExchangeFactory {
     price,
   }: {
     // TODO: possibly add a lazy loading via promises
-    // TODO: add keys only option
-    theirCurrencyInventory: ICurrencyStore;
+    theirCurrencyInventory: ICurrencyInventory;
     intent: Intent;
     price: ICurrency;
   }) {
+    let buyKeyPrice = this.theirKeyPrice;
+    let sellKeyPrice = this.keyPrice;
     let buyInventory = theirCurrencyInventory;
     let sellInventory = this.ourCurrencyInventory;
     if (intent === 'buy') {
       buyInventory = this.ourCurrencyInventory;
       sellInventory = theirCurrencyInventory;
+      buyKeyPrice = this.keyPrice;
+      sellKeyPrice = this.theirKeyPrice;
     }
 
     return new CurrencyExchange({
       buyInventory,
       sellInventory,
-      keyPrice: this.keyPrice,
+      keyPrice: buyKeyPrice,
+      keyPriceForChange: sellKeyPrice,
       price,
     });
   }
@@ -106,7 +124,7 @@ export class CurrencyExchangeFactory {
     intent,
     price,
   }: {
-    theirCurrencyInventory: ICurrencyStore;
+    theirCurrencyInventory: ICurrencyInventory;
     intent: Intent;
     price: ICurrency;
   }) {
@@ -119,7 +137,7 @@ export class CurrencyExchangeFactory {
       .convertByIntent(intent);
   }
 
-  updateInventory(inventory: ICurrencyStore) {
+  updateInventory(inventory: ICurrencyInventory) {
     Object.assign(this.ourCurrencyInventory, inventory);
 
     return this;
@@ -131,6 +149,12 @@ export class CurrencyExchangeFactory {
    */
   updateKeyPrice(keyPrice: number) {
     this.keyPrice = keyPrice;
+
+    return this;
+  }
+
+  updateTheirKeyPrice(keyPrice: number) {
+    this.theirKeyPrice = keyPrice;
 
     return this;
   }

@@ -1,8 +1,17 @@
+export interface ICurrencyInventory {
+  keys: number;
+  ref: number;
+  rec: number;
+  scrap: number;
+  craftWeapons?: number;
+}
+
 export interface ICurrencyStore {
   keys: number;
   ref: number;
   rec: number;
   scrap: number;
+  craftWeapons: number;
 }
 
 export type CurrencyName = keyof ICurrencyStore;
@@ -14,6 +23,7 @@ export type InventoryStore = {
   ref: string[];
   rec: string[];
   scrap: string[];
+  craftWeapons?: string[];
 };
 
 export type ExchangeResult = {

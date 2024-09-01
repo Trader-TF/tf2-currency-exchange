@@ -1,16 +1,16 @@
 import { Currency, ICurrency, toScrap } from 'tf2-currency';
 import { CurrencyExchangeSide } from './exchange-side';
 import {
-  ICurrencyStore,
-  CurrencyName,
   Intent,
   ExchangeResult,
   ConvertedExchangeResult,
+  ICurrencyInventory,
 } from './types';
 
 export class CurrencyExchange {
   public readonly value: number;
   public readonly keyPrice: number;
+  public readonly keyPriceForChange?: number;
 
   private seller: CurrencyExchangeSide;
   private buyer: CurrencyExchangeSide;
@@ -20,9 +20,10 @@ export class CurrencyExchange {
     sellInventory,
     price,
     keyPrice,
+    keyPriceForChange,
   }: {
-    buyInventory: ICurrencyStore;
-    sellInventory: ICurrencyStore;
+    buyInventory: ICurrencyInventory;
+    sellInventory: ICurrencyInventory;
     /**
      * Price in keys and metal.
      */
@@ -31,20 +32,25 @@ export class CurrencyExchange {
      * Key price in metal.
      */
     keyPrice: number;
+    keyPriceForChange?: number;
   }) {
     this.keyPrice = toScrap(keyPrice);
+    this.keyPriceForChange = keyPriceForChange
+      ? toScrap(keyPriceForChange)
+      : this.keyPrice;
+
     this.value = new Currency(price).toScrap(keyPrice);
 
     this.buyer = new CurrencyExchangeSide({
       value: this.value,
       inventory: buyInventory,
-      exchange: this,
+      keyPrice: this.keyPrice,
     });
 
     this.seller = new CurrencyExchangeSide({
       value: 0,
       inventory: sellInventory,
-      exchange: this,
+      keyPrice: this.keyPriceForChange || this.keyPrice,
     });
   }
 
@@ -52,21 +58,8 @@ export class CurrencyExchange {
     return this.seller.isComplete() && this.buyer.isComplete();
   }
 
-  getCurrencyValue(currency: CurrencyName): number {
-    switch (currency) {
-      case 'keys':
-        return this.keyPrice;
-      case 'ref':
-        return 9;
-      case 'rec':
-        return 3;
-      case 'scrap':
-        return 1;
-    }
-  }
-
   /**
-   * This methods attemps to complete the exchange.
+   * This method attempts to complete the exchange.
    */
   trade() {
     this.buyer.fillCurrencySide();
@@ -83,7 +76,7 @@ export class CurrencyExchange {
     this.buyer.clean(changeCurrency);
 
     this.seller.value =
-      this.getCurrencyValue(changeCurrency) - this.buyer.value;
+      this.seller.getCurrencyValue(changeCurrency) - this.buyer.value;
     this.seller.fillCurrencySide();
 
     if (this.seller.isComplete()) {
