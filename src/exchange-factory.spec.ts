@@ -24,6 +24,46 @@ describe('CurrencyExchangeFactory', () => {
 
       expect(result.isComplete()).toBeTruthy();
     });
+
+    it('Sets a different keyprice for other side in trade', () => {
+      const result = CurrencyExchangeFactory.trade({
+        ourCurrencyInventory: {
+          keys: 15,
+          ref: 3,
+          rec: 1,
+          scrap: 0,
+          craftWeapons: 0,
+        },
+        theirCurrencyInventory: {
+          keys: 0,
+          ref: 28,
+          rec: 3,
+          scrap: 9,
+          craftWeapons: 0,
+        },
+        price: { keys: 14, metal: 20 },
+        keyPrice: 60,
+        theirKeyPrice: 50,
+        intent: 'buy',
+      });
+
+      expect(result.isComplete()).toBeTruthy();
+      expect(result.our).toEqual({
+        keys: 15,
+        ref: 0,
+        rec: 0,
+        scrap: 0,
+        craftWeapons: 0,
+      });
+      expect(result.their).toEqual({
+        keys: 0,
+        ref: 28,
+        rec: 3,
+        scrap: 9,
+        craftWeapons: 0,
+      });
+      expect(result.missing).toBe(0);
+    });
   });
 
   describe('CurrencyExchangeFactory.preview', () => {

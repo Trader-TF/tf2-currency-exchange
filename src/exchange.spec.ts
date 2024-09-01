@@ -550,5 +550,255 @@ describe('CurrencyExchange', () => {
       });
       expect(result.missing).toEqual(0);
     });
+
+    describe('trade with different key prices', () => {
+      it('Tries to change with key, we are selling', () => {
+        const exchange = new CurrencyExchange({
+          buyInventory: {
+            keys: 15,
+            ref: 3,
+            rec: 1,
+            scrap: 0,
+            craftWeapons: 0,
+          },
+          sellInventory: {
+            keys: 0,
+            ref: 28,
+            rec: 3,
+            scrap: 9,
+            craftWeapons: 0,
+          },
+          price: { keys: 14, metal: 20 },
+          keyPrice: 60,
+          keyPriceForChange: 50,
+        });
+
+        const result = exchange.trade();
+
+        expect(result.isComplete()).toBeTruthy();
+        expect(result.buyer).toEqual({
+          keys: 15,
+          ref: 0,
+          rec: 0,
+          scrap: 0,
+          craftWeapons: 0,
+        });
+        expect(result.seller).toEqual({
+          keys: 0,
+          ref: 28,
+          rec: 3,
+          scrap: 9,
+          craftWeapons: 0,
+        });
+        expect(result.missing).toEqual(0);
+      });
+
+      it('Tries to change with key, we are buying, key price is the same', () => {
+        const exchange2 = new CurrencyExchange({
+          buyInventory: {
+            keys: 1,
+            ref: 3,
+            rec: 1,
+            scrap: 0,
+            craftWeapons: 0,
+          },
+          sellInventory: {
+            keys: 0,
+            ref: 28,
+            rec: 3,
+            scrap: 9,
+            craftWeapons: 0,
+          },
+          price: { keys: 0, metal: 20 },
+          keyPrice: 60,
+          keyPriceForChange: 50,
+        });
+
+        const result2 = exchange2.trade();
+
+        expect(result2.isComplete()).toBeTruthy();
+        expect(result2.buyer).toEqual({
+          keys: 1,
+          ref: 0,
+          rec: 0,
+          scrap: 0,
+          craftWeapons: 0,
+        });
+        expect(result2.seller).toEqual({
+          keys: 0,
+          ref: 28,
+          rec: 3,
+          scrap: 9,
+          craftWeapons: 0,
+        });
+        expect(result2.missing).toEqual(0);
+      });
+
+      it('Tries to change with keys, we are buying', () => {
+        const exchange = new CurrencyExchange({
+          buyInventory: {
+            keys: 15,
+            ref: 3,
+            rec: 1,
+            scrap: 0,
+            craftWeapons: 0,
+          },
+          sellInventory: {
+            keys: 0,
+            ref: 38,
+            rec: 3,
+            scrap: 9,
+            craftWeapons: 0,
+          },
+          price: { keys: 14, metal: 20 },
+          // keyPrice: { buyer: 50, seller: 60 },
+          keyPrice: 60,
+          keyPriceForChange: 60,
+        });
+
+        const result = exchange.trade();
+
+        expect(result.isComplete()).toBeTruthy();
+        expect(result.buyer).toEqual({
+          keys: 15,
+          ref: 0,
+          rec: 0,
+          scrap: 0,
+          craftWeapons: 0,
+        });
+        expect(result.seller).toEqual({
+          keys: 0,
+          ref: 38,
+          rec: 3,
+          scrap: 9,
+          craftWeapons: 0,
+        });
+        expect(result.missing).toEqual(0);
+      });
+
+      it('Tries to change with keys, we are buying, key prices are the same', () => {
+        const exchange = new CurrencyExchange({
+          buyInventory: {
+            keys: 1,
+            ref: 3,
+            rec: 1,
+            scrap: 0,
+            craftWeapons: 0,
+          },
+          sellInventory: {
+            keys: 0,
+            ref: 38,
+            rec: 3,
+            scrap: 9,
+            craftWeapons: 0,
+          },
+          price: { keys: 0, metal: 20 },
+          // keyPrice: { buyer: 50, seller: 60 },
+          keyPrice: 60,
+          keyPriceForChange: 60,
+        });
+
+        const result = exchange.trade();
+
+        expect(result.isComplete()).toBeTruthy();
+        expect(result.buyer).toEqual({
+          keys: 1,
+          ref: 0,
+          rec: 0,
+          scrap: 0,
+          craftWeapons: 0,
+        });
+        expect(result.seller).toEqual({
+          keys: 0,
+          ref: 38,
+          rec: 3,
+          scrap: 9,
+          craftWeapons: 0,
+        });
+        expect(result.missing).toEqual(0);
+      });
+
+      it('Tries to change with ref', () => {
+        const exchange = new CurrencyExchange({
+          buyInventory: {
+            keys: 1,
+            ref: 3,
+            rec: 1,
+            scrap: 0,
+            craftWeapons: 0,
+          },
+          sellInventory: {
+            keys: 0,
+            ref: 0,
+            rec: 1,
+            scrap: 5,
+            craftWeapons: 0,
+          },
+          price: { keys: 1, metal: 2.44 },
+          keyPrice: 60,
+          keyPriceForChange: 50,
+        });
+
+        const result = exchange.trade();
+
+        expect(result.isComplete()).toBeTruthy();
+        expect(result.buyer).toEqual({
+          keys: 1,
+          ref: 3,
+          rec: 0,
+          scrap: 0,
+          craftWeapons: 0,
+        });
+        expect(result.seller).toEqual({
+          keys: 0,
+          ref: 0,
+          rec: 1,
+          scrap: 2,
+          craftWeapons: 0,
+        });
+        expect(result.missing).toEqual(0);
+      });
+
+      it('Does not convert metal to keys', () => {
+        const exchange = new CurrencyExchange({
+          buyInventory: {
+            keys: 3,
+            ref: 75,
+            rec: 0,
+            scrap: 0,
+            craftWeapons: 0,
+          },
+          sellInventory: {
+            keys: 234,
+            ref: 342,
+            rec: 3,
+            scrap: 5,
+            craftWeapons: 0,
+          },
+          price: { keys: 1, metal: 55 },
+          keyPrice: 60,
+          keyPriceForChange: 50,
+        });
+
+        const result = exchange.trade();
+
+        expect(result.isComplete()).toBeTruthy();
+        expect(result.buyer).toEqual({
+          keys: 1,
+          ref: 55,
+          rec: 0,
+          scrap: 0,
+          craftWeapons: 0,
+        });
+        expect(result.seller).toEqual({
+          keys: 0,
+          ref: 0,
+          rec: 0,
+          scrap: 0,
+          craftWeapons: 0,
+        });
+        expect(result.missing).toEqual(0);
+      });
+    });
   });
 });

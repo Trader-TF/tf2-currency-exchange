@@ -1,4 +1,3 @@
-import { CurrencyExchange } from './exchange';
 import { CurrencyExchangeSide } from './exchange-side';
 
 describe('CurrencyExchangeSide', () => {
@@ -19,7 +18,7 @@ describe('CurrencyExchangeSide', () => {
           scrap: 7,
           craftWeapons: 0,
         },
-        exchange: {} as CurrencyExchange,
+        keyPrice: 50,
       });
 
       expect(side).toBeDefined();

@@ -1,4 +1,3 @@
-import { CurrencyExchange } from './exchange';
 import { ICurrencyStore, CurrencyName, ICurrencyInventory } from './types';
 
 export class CurrencyExchangeSide {
@@ -6,7 +5,7 @@ export class CurrencyExchangeSide {
   public store: ICurrencyStore;
   public inventory: ICurrencyInventory;
   public missingBeforeClean = 0;
-  private exchange: CurrencyExchange;
+  public keyPrice: number;
 
   constructor({
     value = 0,
@@ -18,17 +17,32 @@ export class CurrencyExchangeSide {
       craftWeapons: 0,
     },
     inventory,
-    exchange,
+    keyPrice,
   }: {
     value?: number;
     store?: ICurrencyStore;
     inventory: ICurrencyInventory;
-    exchange: CurrencyExchange;
+    keyPrice: number;
   }) {
     this.value = value;
     this.store = store;
     this.inventory = inventory;
-    this.exchange = exchange;
+    this.keyPrice = keyPrice;
+  }
+
+  getCurrencyValue(currency: CurrencyName) {
+    switch (currency) {
+      case 'keys':
+        return this.keyPrice;
+      case 'ref':
+        return 9;
+      case 'rec':
+        return 3;
+      case 'scrap':
+        return 1;
+      case 'craftWeapons':
+        return 0.5;
+    }
   }
 
   isComplete() {
@@ -42,7 +56,7 @@ export class CurrencyExchangeSide {
       const amount = this.getAmountToFill(currency);
 
       this.store[currency] += amount;
-      this.value -= amount * this.exchange.getCurrencyValue(currency);
+      this.value -= amount * this.getCurrencyValue(currency);
     });
 
     return this;
@@ -52,7 +66,7 @@ export class CurrencyExchangeSide {
     const currencies = ['scrap', 'rec', 'ref', 'keys'] as const;
 
     return currencies.find((currency) => {
-      const currencyValue = this.exchange.getCurrencyValue(currency);
+      const currencyValue = this.getCurrencyValue(currency);
 
       if (this.value >= currencyValue) {
         return false;
@@ -69,7 +83,7 @@ export class CurrencyExchangeSide {
 
     curreniesToClean.forEach((currency) => {
       const amount = this.store[currency] || 0;
-      const value = amount * this.exchange.getCurrencyValue(currency);
+      const value = amount * this.getCurrencyValue(currency);
       this.store[currency] = 0;
       this.value += value;
     });
@@ -78,7 +92,7 @@ export class CurrencyExchangeSide {
   }
 
   getCurrenciesToClean(changeCurrency: CurrencyName) {
-    const changeValue = this.exchange.getCurrencyValue(changeCurrency);
+    const changeValue = this.getCurrencyValue(changeCurrency);
     const currencies: CurrencyName[] = [
       'keys',
       'ref',
@@ -88,14 +102,14 @@ export class CurrencyExchangeSide {
     ];
 
     const thresholdIndex = currencies.findIndex((currency) => {
-      return this.exchange.getCurrencyValue(currency) < changeValue;
+      return this.getCurrencyValue(currency) < changeValue;
     });
 
     return currencies.slice(thresholdIndex);
   }
 
   private getAmountToFill(currency: CurrencyName): number {
-    const currencyValue = this.exchange.getCurrencyValue(currency);
+    const currencyValue = this.getCurrencyValue(currency);
     if (currencyValue > this.value) {
       return 0;
     }
